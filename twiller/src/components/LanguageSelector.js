@@ -1,55 +1,58 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-const LanguageSelector = ({ userEmail, userPhone, onVerify }) => {
+const LanguageSelector = ({ selectedLanguage, onLanguageChange }) => {
   const { i18n } = useTranslation();
-  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
-  const [otpSent, setOtpSent] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
 
-  const handleChangeLanguage = (lang) => {
+  const handleLanguageSwitch = async (lang) => {
     if (lang === "fr") {
-      sendEmailOTP(userEmail);
+      const emailVerified = await handleEmailVerification();
+      if (!emailVerified) return;
     } else {
-      sendMobileOTP(userPhone);
+      const mobileVerified = await handleMobileVerification();
+      if (!mobileVerified) return;
     }
-    setSelectedLanguage(lang);
+    
+    i18n.changeLanguage(lang);
+    onLanguageChange(lang);
   };
 
-  const sendEmailOTP = (email) => {
-    console.log(`Sending OTP to email: ${email}`);
-    setOtpSent(true);
+  const handleEmailVerification = async () => {
+    setIsVerifying(true);
+    // Simulate email verification process
+    setTimeout(() => {
+      alert("Email OTP Verified ✅");
+      setIsVerifying(false);
+    }, 2000);
+    return true;
   };
 
-  const sendMobileOTP = (phone) => {
-    console.log(`Sending OTP to phone: ${phone}`);
-    setOtpSent(true);
-  };
-
-  const verifyOTP = (otp) => {
-    if (otp === "1234") {
-      i18n.changeLanguage(selectedLanguage);
-      onVerify(selectedLanguage);
-      setOtpSent(false);
-    } else {
-      alert("Invalid OTP!");
-    }
+  const handleMobileVerification = async () => {
+    setIsVerifying(true);
+    // Simulate mobile OTP verification
+    setTimeout(() => {
+      alert("Mobile OTP Verified ✅");
+      setIsVerifying(false);
+    }, 2000);
+    return true;
   };
 
   return (
     <div>
-      <select onChange={(e) => handleChangeLanguage(e.target.value)}>
+      <h2>Select Language</h2>
+      <select
+        value={selectedLanguage}
+        onChange={(e) => handleLanguageSwitch(e.target.value)}
+        disabled={isVerifying}
+      >
         <option value="en">English</option>
-        <option value="fr">Français</option>
-        <option value="es">Español</option>
-        <option value="hi">हिन्दी</option>
-        <option value="pt">Português</option>
-        <option value="zh">中文</option>
+        <option value="es">Spanish</option>
+        <option value="hi">Hindi</option>
+        <option value="pt">Portuguese</option>
+        <option value="zh">Chinese</option>
+        <option value="fr">French</option>
       </select>
-      {otpSent && (
-        <div>
-          <input type="text" placeholder="Enter OTP" onChange={(e) => verifyOTP(e.target.value)} />
-        </div>
-      )}
     </div>
   );
 };

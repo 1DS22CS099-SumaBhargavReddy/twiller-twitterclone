@@ -15,7 +15,7 @@ import Lists from "./Pages/Lists/Lists";
 import Profile from "./Pages/Profile/Profile";
 import More from "./Pages/more/More";
 import Bookmark from "./Pages/Bookmark/Bookmark";
-import "./i18n";
+import "./i18n.js";
 import "./App.css";
 
 const App = () => {

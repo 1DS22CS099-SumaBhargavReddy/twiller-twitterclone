@@ -6,7 +6,7 @@ const Feed = () => {
   const [post, setpost] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/post")
+    fetch("https://twiller-twitterclone-li5d.onrender.com/post")
       .then((res) => res.json())
       .then((data) => {
         setpost(data);
